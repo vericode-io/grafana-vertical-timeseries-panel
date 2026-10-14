@@ -46,7 +46,7 @@ Acesse: `http://localhost:3000` (admin/admin).
 Para testar o `dist` num Grafana que não é o do plugin, na raiz deste repositório, depois do build:
 
 ```powershell
-docker run -d --name grafana-plugin-test -p 3001:3000 -e GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=vericode-vertical-timeseries-panel -v "${PWD}\dist:/var/lib/grafana/plugins/vericode-vertical-timeseries-panel" grafana/grafana:12.2.1
+docker run -d --name grafana-plugin-test -p 3001:3000 -e GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=vericode-verticaltimeseries-panel -v "${PWD}\dist:/var/lib/grafana/plugins/vericode-verticaltimeseries-panel" grafana/grafana:12.2.1
 ```
 
 Acesse: `http://localhost:3001` (admin/admin).
@@ -57,14 +57,14 @@ Acesse: `http://localhost:3001` (admin/admin).
 2.  Copie a pasta `dist` para o diretório de plugins do servidor, com o nome do id do plugin:
 
     ```bash
-    sudo cp -r dist /var/lib/grafana/plugins/vericode-vertical-timeseries-panel
+    sudo cp -r dist /var/lib/grafana/plugins/vericode-verticaltimeseries-panel
     ```
 
 3.  Permita plugins não assinados no `grafana.ini`:
 
     ```ini
     [plugins]
-    allow_loading_unsigned_plugins = vericode-vertical-timeseries-panel
+    allow_loading_unsigned_plugins = vericode-verticaltimeseries-panel
     ```
 
 4.  Reinicie o Grafana:
@@ -73,7 +73,7 @@ Acesse: `http://localhost:3001` (admin/admin).
     sudo systemctl restart grafana-server
     ```
 
-Se o Grafana recusar o plugin com "Plugin not signed", confira se o id `vericode-vertical-timeseries-panel` está nessa lista e se o serviço foi reiniciado depois da alteração.
+Se o Grafana recusar o plugin com "Plugin not signed", confira se o id `vericode-verticaltimeseries-panel` está nessa lista e se o serviço foi reiniciado depois da alteração.
 
 ## Como Usar
 

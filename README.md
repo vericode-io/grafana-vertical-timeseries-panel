@@ -15,12 +15,12 @@ The built-in XY Chart is built around one X and many Y values. In the opposite l
 The plugin is not signed yet. Grafana will load it only if the plugin id is allowed.
 
 1. Build the plugin with `npm install` and `npm run build`, or use an existing `dist` folder.
-2. Copy that folder to the Grafana plugins directory and name it `vericode-vertical-timeseries-panel`. The folder must contain `plugin.json` and `module.js`.
+2. Copy that folder to the Grafana plugins directory and name it `vericode-verticaltimeseries-panel`. The folder must contain `plugin.json` and `module.js`.
 3. Allow the unsigned plugin in `grafana.ini`:
 
 ```ini
 [plugins]
-allow_loading_unsigned_plugins = vericode-vertical-timeseries-panel
+allow_loading_unsigned_plugins = vericode-verticaltimeseries-panel
 ```
 
 4. Restart Grafana.
@@ -29,9 +29,9 @@ On Docker, mount the built folder and set the same allow-list:
 
 ```yaml
 environment:
-  GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: vericode-vertical-timeseries-panel
+  GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: vericode-verticaltimeseries-panel
 volumes:
-  - ./dist:/var/lib/grafana/plugins/vericode-vertical-timeseries-panel
+  - ./dist:/var/lib/grafana/plugins/vericode-verticaltimeseries-panel
 ```
 
 ## Usage
