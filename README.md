@@ -52,4 +52,4 @@ To keep axis titles from being duplicated, use field overrides:
 
 Apache License 2.0. Based on the Grafana XY Chart.
 
-Notes in Portuguese: [docs/README.md](docs/README.md).
+Notes in Portuguese: [docs/README.md](https://github.com/vericode-io/vericode-custom-xychart/blob/main/docs/README.md).
