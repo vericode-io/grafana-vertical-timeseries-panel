@@ -1,0 +1,615 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "trlxrdZVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 50,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "pointShape": "circle",
+            "pointSize": {
+              "fixed": 5
+            },
+            "pointStrokeWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "show": "lines"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 18,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "manualSeries": [
+          {
+            "color": "#73BF69",
+            "name": "A-series",
+            "xField": "A-series",
+            "yField": "time"
+          },
+          {
+            "color": "#FADE2A",
+            "name": "A-series1",
+            "xField": "A-series1",
+            "yField": "time"
+          },
+          {
+            "color": "#5794F2",
+            "name": "A-series2",
+            "xField": "A-series2",
+            "yField": "time"
+          },
+          {
+            "color": "#FF9830",
+            "name": "A-series3",
+            "xField": "A-series3",
+            "yField": "time"
+          },
+          {
+            "color": "#F2495C",
+            "name": "A-series4",
+            "xField": "A-series4",
+            "yField": "time"
+          },
+          {
+            "color": "#B877D9",
+            "name": "PERSON1",
+            "xField": "PERSON1",
+            "yField": "time"
+          },
+          {
+            "color": "#37872D",
+            "name": "PERSON2",
+            "xField": "PERSON2",
+            "yField": "time"
+          }
+        ],
+        "mapping": "auto",
+        "seriesCountSize": "sm",
+        "showSeriesCount": false,
+        "text": "Default value of text input option",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "1.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "trlxrdZVk"
+          },
+          "refId": "A",
+          "scenarioId": "random_walk",
+          "seriesCount": 5
+        }
+      ],
+      "title": "Auto",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "PERSON1",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "A-series1",
+                "A-series2"
+              ],
+              "reducer": "first"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "PERSON2",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "A-series3",
+                "A-series4"
+              ],
+              "reducer": "firstNotNull"
+            }
+          }
+        }
+      ],
+      "type": "vericode-verticaltimeseries-panel"
+    },
+    {
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "trlxrdZVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 50,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "pointShape": "circle",
+            "pointSize": {
+              "fixed": 5
+            },
+            "pointStrokeWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "show": "lines"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 18,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "manualSeries": [
+          {
+            "color": "#FADE2A",
+            "name": "Series",
+            "xField": "A-series",
+            "yField": "time"
+          },
+          {
+            "color": "#5794F2",
+            "name": "Person 1",
+            "xField": "PERSON1",
+            "yField": "time"
+          },
+          {
+            "color": "#73BF69",
+            "name": "Person 2",
+            "xField": "PERSON2",
+            "yField": "time"
+          }
+        ],
+        "mapping": "manual",
+        "seriesCountSize": "sm",
+        "showSeriesCount": false,
+        "text": "Default value of text input option",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "1.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "trlxrdZVk"
+          },
+          "refId": "A",
+          "scenarioId": "random_walk",
+          "seriesCount": 5
+        }
+      ],
+      "title": "Manual",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "PERSON1",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "A-series1",
+                "A-series2"
+              ],
+              "reducer": "first"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "PERSON2",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "A-series3",
+                "A-series4"
+              ],
+              "reducer": "firstNotNull"
+            }
+          }
+        }
+      ],
+      "type": "vericode-verticaltimeseries-panel"
+    },
+    {
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "trlxrdZVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 0,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 2,
+            "pointShape": "circle",
+            "pointSize": {
+              "fixed": 5
+            },
+            "pointStrokeWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "show": "lines"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 8,
+        "x": 0,
+        "y": 18
+      },
+      "id": 3,
+      "options": {
+        "manualSeries": [
+          {
+            "color": "#73BF69",
+            "name": "With data",
+            "xField": "With data",
+            "yField": "time"
+          },
+          {
+            "color": "#F2495C",
+            "name": "No data",
+            "xField": "Empty",
+            "yField": "time"
+          }
+        ],
+        "mapping": "manual",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "1.1.0",
+      "targets": [
+        {
+          "csvContent": "time,With data,Empty\n2026-10-13T20:56:13Z,10,\n2026-10-13T21:56:13Z,12,\n2026-10-13T22:56:13Z,9,\n2026-10-13T23:56:13Z,14,\n2026-10-14T00:56:13Z,11,",
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "trlxrdZVk"
+          },
+          "refId": "A",
+          "scenarioId": "csv_content"
+        }
+      ],
+      "title": "Manual: one series with data, one without",
+      "type": "vericode-verticaltimeseries-panel"
+    },
+    {
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "trlxrdZVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 50,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 2,
+            "pointShape": "circle",
+            "pointSize": {
+              "fixed": 5
+            },
+            "pointStrokeWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "show": "lines"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 8,
+        "x": 8,
+        "y": 18
+      },
+      "id": 5,
+      "maxDataPoints": 20,
+      "options": {
+        "manualSeries": [
+          {
+            "color": "#73BF69",
+            "name": "Sensor A",
+            "xField": "Sensor A",
+            "yField": "time"
+          },
+          {
+            "color": "#FADE2A",
+            "name": "Sensor B",
+            "xField": "Sensor B",
+            "yField": "time"
+          },
+          {
+            "color": "#5794F2",
+            "name": "Sensor C",
+            "xField": "Sensor C",
+            "yField": "time"
+          }
+        ],
+        "mapping": "auto",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "1.1.0",
+      "targets": [
+        {
+          "csvContent": "time,Sensor A,Sensor B,Sensor C\r\n2026-10-14T09:40:00Z,10,20,8\r\n2026-10-14T09:50:00Z,11,20,9\r\n2026-10-14T10:00:00Z,12,19,8\r\n2026-10-14T10:10:00Z,13,18,10\r\n2026-10-14T10:20:00Z,14,17,9\r\n2026-10-14T10:30:00Z,15,16,11\r\n2026-10-14T10:40:00Z,14,16,12\r\n2026-10-14T10:50:00Z,13,17,11\r\n2026-10-14T11:00:00Z,12,18,10\r\n2026-10-14T11:10:00Z,13,19,9\r\n2026-10-14T11:20:00Z,14,20,8",
+          "refId": "A",
+          "scenarioId": "csv_content"
+        }
+      ],
+      "title": "Vertical compared with time series",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        }
+      ],
+      "type": "vericode-verticaltimeseries-panel"
+    },
+    {
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "trlxrdZVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 8,
+        "x": 16,
+        "y": 18
+      },
+      "id": 4,
+      "maxDataPoints": 20,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.2.1",
+      "targets": [
+        {
+          "csvContent": "time,Sensor A,Sensor B,Sensor C\r\n2026-10-14T09:40:00Z,10,20,8\r\n2026-10-14T09:50:00Z,11,20,9\r\n2026-10-14T10:00:00Z,12,19,8\r\n2026-10-14T10:10:00Z,13,18,10\r\n2026-10-14T10:20:00Z,14,17,9\r\n2026-10-14T10:30:00Z,15,16,11\r\n2026-10-14T10:40:00Z,14,16,12\r\n2026-10-14T10:50:00Z,13,17,11\r\n2026-10-14T11:00:00Z,12,18,10\r\n2026-10-14T11:10:00Z,13,19,9\r\n2026-10-14T11:20:00Z,14,20,8",
+          "refId": "A",
+          "scenarioId": "csv_content"
+        }
+      ],
+      "title": "Vertical compared with time series",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        }
+      ],
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "refresh": "",
+  "schemaVersion": 42,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "2026-10-14T09:38:46.117Z",
+    "to": "2026-10-14T11:22:15.369Z"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Samples Vertical Time Series",
+  "uid": "a538aeff-5a8a-42a5-901c-938d896fdd6f"
+}

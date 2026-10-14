@@ -10,7 +10,7 @@ A análise inicial demonstrou que o plugin nativo (XY Chart) possuía limitaçõ
 
 ### Plugin Criado: **Vericode Custom Chart**
 
-- **ID**: `vericode-vertical-timeseries-panel`
+- **ID**: `vericode-verticaltimeseries-panel`
 - **Nome**: Vericode Custom Chart
 - **Funcionalidade Principal**: Gráfico XY Vertical (N:1) com suporte a múltiplas séries independentes e interatividade total (tooltips e legendas funcionais).
 
@@ -49,12 +49,12 @@ O repositório contém o código completo, incluindo:
 - Painel principal (`VerticalXYPanel.tsx`).
 
 ### 2. Documentação Técnica
-- **`README.md`**: Guia rápido e visão geral.
-- **`INSTALACAO_E_USO.md`**: Guia passo-a-passo para instalação manual e via Docker.
-- **`MODIFICACOES_TECNICAS.md`**: Análise aprofundada dos problemas do nativo e das soluções implementadas.
+- **`README.md`** (raiz, em inglês): página do repositório e do catálogo.
+- **`docs/README.md`**: visão geral, como testar e como usar o painel.
+- **`docs/MODIFICACOES_TECNICAS.md`**: análise aprofundada dos problemas do nativo e das soluções implementadas.
 
 ### 3. Ambiente de Teste
-- **`docker-compose.yml`**: Ambiente pronto para rodar e testar o plugin localmente.
+- **`docker-compose.yaml`** (raiz): ambiente pronto para rodar e testar o plugin localmente.
 - **Dashboards de Exemplo**: Arquivos JSON pré-configurados para validação imediata.
 
 ## Conclusão

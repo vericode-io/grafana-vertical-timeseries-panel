@@ -1,0 +1,47 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "panel",
+  "name": "Vertical Time Series",
+  "id": "vericode-verticaltimeseries-panel",
+  "info": {
+    "keywords": ["panel"],
+    "description": "Shared vertical axis for multiple metrics.",
+    "author": {
+      "name": "Vericode"
+    },
+    "logos": {
+      "small": "img/logo.png",
+      "large": "img/logo.png"
+    },
+    "links": [
+      {
+        "name": "repository",
+        "url": "https://github.com/vericode-io/vericode-custom-xychart"
+      },
+      {
+        "name": "documentation",
+        "url": "https://github.com/vericode-io/vericode-custom-xychart/blob/main/README.md"
+      },
+      {
+        "name": "raise issue",
+        "url": "https://github.com/vericode-io/vericode-custom-xychart/issues"
+      },
+      {
+        "name": "license",
+        "url": "https://github.com/vericode-io/vericode-custom-xychart/blob/main/LICENSE"
+      }
+    ],
+    "screenshots": [
+      {
+        "name": "Three metrics on a shared vertical axis",
+        "path": "img/screenshot.png"
+      }
+    ],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+  "dependencies": {
+    "grafanaDependency": ">=10.4.0",
+    "plugins": []
+  }
+}

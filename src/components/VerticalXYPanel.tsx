@@ -155,6 +155,14 @@ export const VerticalXYPanel: React.FC<Props> = ({ options, data, width, height 
             return undefined;
           }
 
+          // Campo X sem nenhum número: a série não entra no gráfico nem na legenda.
+          const hasData = xField.values.some(
+            (v) => v !== null && v !== undefined && !Number.isNaN(v)
+          );
+          if (!hasData) {
+            return undefined;
+          }
+
           const seriesName = seriesConfig.name ?? xField.name;
 
           return mapFieldsToXYSeries(xField, yField, theme, {
@@ -288,6 +296,25 @@ export const VerticalXYPanel: React.FC<Props> = ({ options, data, width, height 
       .filter((item) => !item.isLimit);
   }, [xySeries]);
 
+  const legendRef = useRef<HTMLDivElement>(null);
+  const [legendActualHeight, setLegendActualHeight] = useState(40);
+
+  useEffect(() => {
+    const observer = new ResizeObserver((entries) => {
+      if (entries[0]) {
+        const target = entries[0].target as HTMLElement;
+        setLegendActualHeight(target.offsetHeight);
+      }
+    });
+    if (legendRef.current) {
+      observer.observe(legendRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [data.series, xySeries.length]);
+
   // --- Renderização ---
 
   if (!builder || !plotData || plotData.length === 0) {
@@ -296,44 +323,18 @@ export const VerticalXYPanel: React.FC<Props> = ({ options, data, width, height 
         <p>No data found.</p>
         {options.mapping === SeriesMapping.Manual && (
           <p>
-            <i>Modo Manual: Clique em &quot;Adicionar Série&quot; e selecione os campos Y e X.</i>
+            <i>Manual mode: click &quot;Add series&quot; and select the Y and X fields.</i>
           </p>
         )}
         {options.mapping === SeriesMapping.Auto && (
           <p>
-            <i>Modo Auto: Y = 1ª coluna, X = outras colunas numéricas.</i>
+            <i>Auto mode: Y is the first column, X is the other numeric columns.</i>
           </p>
         )}
       </div>
     );
   }
 
-  // Verifica series para avaliar o tamanho da legenda;
-  const series = data.series || [];
-  const legendRef = useRef<HTMLDivElement>(null);
-  const [legendActualHeight, setLegendActualHeight] = useState(40);
-
-  //observer para variação de tamanho
-
-  useEffect(() =>
-  {
-    const observer = new ResizeObserver((entries) =>
-    {
-      if(entries[0])
-      {
-        const target = entries[0].target as HTMLElement;
-        setLegendActualHeight(target.offsetHeight);
-      }
-    });
-    if(legendRef.current)
-    {
-      observer.observe(legendRef.current);
-    }
-
-    return () => {observer.disconnect();};
-  }, [series]);
-
-  // const legendActualHeight = 40;
   const MAX_HEIGHT = 80;
   const chartHeight = height - legendActualHeight;
 

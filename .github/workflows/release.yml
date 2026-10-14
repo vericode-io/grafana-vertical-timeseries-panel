@@ -1,51 +1,29 @@
+# This GitHub Action automates the process of building Grafana plugins.
+# (For more information, see https://github.com/grafana/plugin-actions/blob/main/build-plugin/README.md)
 name: Release
 
 on:
   push:
     tags:
-      - 'v*'
+      - 'v*' # Run workflow on version tags, e.g. v1.0.0.
 
-permissions:
-  contents: write
+permissions: read-all
 
 jobs:
   release:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'npm'
-          cache-dependency-path: plugin/package-lock.json
+          persist-credentials: false
 
-      - name: Install dependencies
-        working-directory: plugin
-        run: npm ci
-
-      - name: Build Plugin
-        working-directory: plugin
-        run: npm run build
-
-      - name: Package Plugin
-        working-directory: plugin
-        run: |
-          # Pega o ID do plugin
-          PLUGIN_ID=$(jq -r .id src/plugin.json)
-          
-          # Renomeia a pasta dist para o ID do plugin (padrão Grafana)
-          mv dist $PLUGIN_ID
-          
-          # Cria o zip
-          zip -r $PLUGIN_ID.zip $PLUGIN_ID
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          generate_release_notes: true
-          files: |
-            plugin/*.zip
-            plugin/*.md
+      - uses: grafana/plugin-actions/build-plugin@build-plugin/v1.0.2
+        # Uncomment to enable plugin signing
+        # (For more info on how to generate the access policy token see https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin#generate-an-access-policy-token)
+        #with:
+        # Make sure to save the token in your repository secrets
+        #policy_token: $
+        # Usage of GRAFANA_API_KEY is deprecated, prefer `policy_token` option above
+        #grafana_token: $
