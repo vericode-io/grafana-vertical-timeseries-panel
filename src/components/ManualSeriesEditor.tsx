@@ -73,10 +73,10 @@ export const ManualSeriesEditor: React.FC<Props> = ({ value: seriesList = [], on
               <Input
                 value={series.name ?? ''}
                 onChange={(e) => onSeriesChange(index, { ...series, name: e.currentTarget.value })}
-                placeholder="Nome da Série"
+                placeholder="Series name"
               />
             </GrafanaField>
-            <GrafanaField label="Cor">
+            <GrafanaField label="Color">
               <ColorPicker
                 color={series.color ?? theme.visualization.palette[index % theme.visualization.palette.length]}
                 onChange={(color) => onSeriesChange(index, { ...series, color: color })}
@@ -104,7 +104,7 @@ export const ManualSeriesEditor: React.FC<Props> = ({ value: seriesList = [], on
                 width={25}
               />
             </GrafanaField>
-            <GrafanaField label="Limite">
+            <GrafanaField label="Limit">
               <Switch
                 value={series.isLimit ?? false}
                 onChange={(e) => onSeriesChange(index, { ...series, isLimit: e.currentTarget.checked })}
@@ -114,7 +114,7 @@ export const ManualSeriesEditor: React.FC<Props> = ({ value: seriesList = [], on
         </div>
       ))}
       <Button icon="plus" onClick={onAddSeries} variant="secondary">
-        Adicionar Série
+        Add series
       </Button>
     </div>
   );

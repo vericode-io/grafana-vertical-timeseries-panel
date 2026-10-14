@@ -5,7 +5,7 @@
   "id": "vericode-vertical-timeseries-panel",
   "info": {
     "keywords": ["panel"],
-    "description": "",
+    "description": "Shared vertical axis for multiple metrics.",
     "author": {
       "name": "Vericode"
     },
