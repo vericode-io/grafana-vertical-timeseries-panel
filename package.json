@@ -74,5 +74,9 @@
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
-  "packageManager": "npm@11.6.2"
+  "packageManager": "npm@11.6.2",
+  "overrides": {
+    "js-yaml": "4.3.2",
+    "serialize-javascript": "7.1.2"
+  }
 }
