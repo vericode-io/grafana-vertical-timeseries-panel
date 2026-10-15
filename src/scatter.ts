@@ -365,12 +365,15 @@ export const prepConfig = (
     }
     const xVal = data[0][didx];
     const yVal = data[1][didx];
+    const xField = series.x.field;
     const yField = series.y.field;
+    // O override de Decimals fica em field.config. O display() lê esse valor.
+    const xDisp = xField.display ? xField.display(xVal) : { text: String(xVal) };
     const yDisp = yField.display ? yField.display(yVal) : { text: String(yVal) };
 
     const tooltipData = {
       seriesName: series.name,
-      xValue: String(xVal), 
+      xValue: formattedValueToString(xDisp),
       yValue: formattedValueToString(yDisp),
       xPos: u.cursor.left,
       yPos: u.cursor.top,
@@ -432,11 +435,14 @@ export const prepConfig = (
   // pois no nosso caso N:1, o eixo X não tem um label único.
   let xAxisLabel = customConfig.axisLabel ?? '';
 
+  // Left/Right/Hidden movem só o tempo (eixo vertical).
+  // As métricas ficam embaixo. Se o placement cair neste eixo, os números
+  // sobem para o lado e o tempo vai para a base.
   builder.addAxis({
     scaleKey: 'x',
     theme,
-    placement: customConfig?.axisPlacement === AxisPlacement.Auto ? AxisPlacement.Bottom : customConfig?.axisPlacement,
-    show: customConfig?.axisPlacement !== AxisPlacement.Hidden,
+    placement: AxisPlacement.Bottom,
+    show: true,
     grid: { show: customConfig?.axisGridShow },
     border: { show: customConfig?.axisBorderShow },
     size: customConfig?.axisWidth,
@@ -483,12 +489,18 @@ export const prepConfig = (
     
     // O label do Eixo Y é lido do campo Y
     let yAxisLabel = yCustomConfig.axisLabel ?? (yField.state?.displayName ?? yField.name);
-    
+    const timePlacement =
+      yCustomConfig?.axisPlacement === AxisPlacement.Right
+        ? AxisPlacement.Right
+        : yCustomConfig?.axisPlacement === AxisPlacement.Hidden
+          ? AxisPlacement.Hidden
+          : AxisPlacement.Left;
+
     builder.addAxis({
       scaleKey: yScaleKey,
       isTime: yIsTime,
-      placement: yCustomConfig?.axisPlacement !== AxisPlacement.Hidden ? yCustomConfig.axisPlacement : AxisPlacement.Hidden,
-      show: yCustomConfig?.axisPlacement !== AxisPlacement.Hidden,
+      placement: timePlacement,
+      show: timePlacement !== AxisPlacement.Hidden,
       grid: { show: yCustomConfig?.axisGridShow },
       border: { show: yCustomConfig?.axisBorderShow },
       theme,

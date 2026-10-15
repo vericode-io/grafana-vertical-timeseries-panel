@@ -5,6 +5,7 @@ import {
   DataFrame,
   FieldType,
   FALLBACK_COLOR,
+  FieldColorModeId,
   GrafanaTheme2,
 } from '@grafana/data';
 import { VisibilityMode } from '@grafana/schema';
@@ -83,9 +84,15 @@ const mapFieldsToXYSeries = (
     isLimit?: boolean;
   }
 ): XYSeries => {
-  // Lê a config (dos Overrides) do campo X
+  // Lê a config (dos Overrides) do campo X.
+  // Cor fixa do campo vem do seletor da legenda e ganha da cor manual.
   const customCfg = getCustomConfig(xField);
-  const finalColor = getSeriesColor(theme, config.color, config.index);
+  const fieldColor = xField.config.color;
+  const fixedColor =
+    fieldColor?.mode === FieldColorModeId.Fixed && fieldColor.fixedColor
+      ? theme.visualization.getColorByName(fieldColor.fixedColor)
+      : undefined;
+  const finalColor = fixedColor ?? getSeriesColor(theme, config.color, config.index);
 
   const show = customCfg.show ?? XYShowMode.Points;
   const showLine = show === XYShowMode.Lines || show === XYShowMode.PointsAndLines;
@@ -175,28 +182,37 @@ export const VerticalXYPanel: React.FC<Props> = ({ options, data, width, height 
         .filter((series): series is XYSeries => series !== undefined);
     }
 
-    // Lógica do Modo Auto (Y = 1º campo, X = outros campos numéricos)
-    const frame = data.series[0];
-    if (!frame || frame.fields.length < 2) {
-      return [];
+    // Modo Auto, no mesmo espírito do Time series: cada frame da consulta entra no gráfico.
+    // Random Walk devolve um frame por série. Um CSV largo continua com várias colunas no mesmo frame.
+    const xySeriesFromFrames: XYSeries[] = [];
+    let colorIndex = 0;
+
+    for (const frame of data.series) {
+      if (!frame || frame.fields.length < 2) {
+        continue;
+      }
+
+      const yField = frame.fields.find((field) => field.type === FieldType.time) ?? frame.fields[0];
+      const xFields = frame.fields.filter(
+        (field) =>
+          field !== yField &&
+          field.type === FieldType.number &&
+          field.values.some((v) => v !== null && v !== undefined && !Number.isNaN(v))
+      );
+
+      for (const xField of xFields) {
+        xySeriesFromFrames.push(
+          mapFieldsToXYSeries(xField, yField, theme, {
+            name: xField.state?.displayName ?? xField.name,
+            index: colorIndex,
+            isLimit: false,
+          })
+        );
+        colorIndex += 1;
+      }
     }
-    const yField = frame.fields[0];
-    const xFields = frame.fields.filter(
-      (field, index) =>
-        index > 0 &&
-        field.type === FieldType.number &&
-        field.values.some((v) => v !== null && v !== undefined && !Number.isNaN(v))
-    );
 
-    return xFields.map((xField, index): XYSeries => {
-      const seriesName = xField.state?.displayName ?? xField.name;
-
-      return mapFieldsToXYSeries(xField, yField, theme, {
-        name: seriesName,
-        index: index,
-        isLimit: false,
-      });
-    });
+    return xySeriesFromFrames;
   }, [options.mapping, options.manualSeries, data, theme]);
   
   useEffect(() => {
@@ -328,7 +344,7 @@ export const VerticalXYPanel: React.FC<Props> = ({ options, data, width, height 
         )}
         {options.mapping === SeriesMapping.Auto && (
           <p>
-            <i>Auto mode: Y is the first column, X is the other numeric columns.</i>
+            <i>Auto mode: every numeric series is drawn on the shared vertical axis.</i>
           </p>
         )}
       </div>
