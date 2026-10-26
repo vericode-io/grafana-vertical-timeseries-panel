@@ -19,7 +19,7 @@ npm run build
 npm run server
 ```
 
-Open http://localhost:3001 (admin / admin). Sample dashboards are provisioned automatically.
+Open http://localhost:3000 (admin / admin). Sample dashboards are provisioned automatically.
 
 ## Install into an existing Grafana
 

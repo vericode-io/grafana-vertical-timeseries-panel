@@ -44,7 +44,7 @@ npm run build
 npm run server
 ```
 
-Grafana de demo em http://localhost:3001 — login **admin / admin**. Os samples vêm de `provisioning/dashboards/dashboard.json` (inclui exemplos Auto, Manual e formato OpenHistorian).
+Grafana de demo em http://localhost:3000 — login **admin / admin**. Os samples vêm de `provisioning/dashboards/dashboard.json` (inclui exemplos Auto, Manual e formato OpenHistorian).
 
 ### Em um Grafana existente
 
