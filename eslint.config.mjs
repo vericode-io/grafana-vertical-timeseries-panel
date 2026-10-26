@@ -36,4 +36,10 @@ export default defineConfig([
     ],
   },
   ...baseConfig,
+  {
+    // uPlot/chart code legitimately captures instances via refs in callbacks.
+    rules: {
+      'react-hooks/refs': 'off',
+    },
+  },
 ]);

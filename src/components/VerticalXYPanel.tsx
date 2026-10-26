@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState, useEffect } from 'react';
+import React, { useMemo, useRef, useState, useEffect, useCallback } from 'react';
 import {
   PanelProps,
   Field,
@@ -227,6 +227,10 @@ export const VerticalXYPanel: React.FC<Props> = ({ options, data, width, height 
      }
    }, [hiddenSeriesIndexes, xySeries]);
 
+  const onChartInstance = useCallback((u: uPlot | null) => {
+    uPlotInstance.current = u;
+  }, []);
+
   /**
    * MODIFICAÇÃO:
    * Chama o nosso 'prepConfig' (fork do 'scatter.ts') e passa
@@ -238,15 +242,8 @@ export const VerticalXYPanel: React.FC<Props> = ({ options, data, width, height 
       return { builder: null, data: [] };
     }
 
-    return prepConfig(
-      xySeries,
-      theme,
-      (u: uPlot | null) => {
-        uPlotInstance.current = u; // Salva a instância do uPlot
-      },
-      setTooltip // Passa o 'setter' do estado do tooltip
-    );
-  }, [xySeries, theme, setTooltip]);
+    return prepConfig(xySeries, theme, onChartInstance, setTooltip);
+  }, [xySeries, theme, onChartInstance, setTooltip]);
 
   /**
    * ADIÇÃO:

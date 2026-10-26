@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-deprecated */
 import React from 'react';
 import { GrafanaTheme2 } from '@grafana/data';
 import { css } from '@emotion/css';

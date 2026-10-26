@@ -26,7 +26,7 @@ export const ManualSeriesEditor: React.FC<Props> = ({ value: seriesList = [], on
   const theme = useTheme2();
   const styles = getStyles(theme);
 
-  const data: DataFrame[] = React.useMemo(() => context.data ?? [], [context?.data]);
+  const data: DataFrame[] = React.useMemo(() => context.data ?? [], [context.data]);
 
   const yFieldOptions = React.useMemo(() => buildFieldOptions(data), [data]);
   const xFieldOptions = React.useMemo(
