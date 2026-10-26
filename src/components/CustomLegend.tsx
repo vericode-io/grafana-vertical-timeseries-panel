@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-deprecated */
 import React from 'react';
 import { GrafanaTheme2 } from '@grafana/data';
 import { css } from '@emotion/css';
-import { useTheme2 } from '@grafana/ui';
+import { SeriesColorPicker, SeriesIcon, usePanelContext, useTheme2 } from '@grafana/ui';
 
 interface LegendItemProps {
   name: string;
@@ -30,26 +29,40 @@ export const CustomLegend: React.FC<Props> = ({
 }) => {
   const theme = useTheme2();
   const styles = getStyles(theme);
+  const { onSeriesColorChange } = usePanelContext();
 
   return (
     <div className={styles.wrapper}>
-      {series.map((item, index) => {
+      {series.map((item) => {
         const isHidden = hiddenIndexes.includes(item.originalIndex);
 
         return (
-          <div
-            key={item.originalIndex}
-            className={styles.itemWrapper}
-            onClick={(e) => onSeriesClick(item.originalIndex, e)}
-            style={{ opacity: isHidden ? 0.3 : 1, transition: 'opacity 0.3s' }}
-          >
-            <div
-              className={styles.seriesIcon}
-              style={{ backgroundColor: item.color }}
-            />
-            <span 
-              className={styles.label}
-              style={{ color: theme.colors.text.secondary }}
+          <div key={item.originalIndex} className={styles.itemWrapper}>
+            {onSeriesColorChange ? (
+              <SeriesColorPicker
+                color={item.color}
+                enableNamedColors
+                onChange={(color) => onSeriesColorChange(item.name, color)}
+              >
+                {({ ref, showColorPicker, hideColorPicker }) => (
+                  <SeriesIcon
+                    ref={ref}
+                    className={styles.icon}
+                    color={item.color}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      showColorPicker();
+                    }}
+                    onMouseLeave={hideColorPicker}
+                  />
+                )}
+              </SeriesColorPicker>
+            ) : (
+              <SeriesIcon className={styles.icon} color={item.color} />
+            )}
+            <span
+              className={isHidden ? styles.labelInactive : styles.label}
+              onClick={(event) => onSeriesClick(item.originalIndex, event)}
             >
               {item.name}
             </span>
@@ -70,28 +83,29 @@ const getStyles = (theme: GrafanaTheme2) => ({
     justify-content: flex-start;
     overflow-y: visible;
     height: 100%;
+    font-size: ${theme.typography.bodySmall.fontSize};
+    color: ${theme.colors.text.primary};
   `,
   itemWrapper: css`
-    cursor: pointer;
     display: flex;
     align-items: center;
-    transition: opacity 0.2s ease-in-out;
+    gap: ${theme.spacing(1)};
     pointer-events: auto;
     flex-shrink: 0;
   `,
-  seriesIcon: css`
-    width: 14px;
-    height: 14px;
-    margin-right: ${theme.spacing(0.5)};
-    border-radius: ${theme.shape.borderRadius(1)};
-    flex-shrink: 0;
+  icon: css`
+    cursor: pointer;
   `,
   label: css`
-    font-size: ${theme.typography.size.sm};
-    color: ${theme.colors.text.secondary};
+    cursor: pointer;
+    font-size: inherit;
+    color: ${theme.colors.text.primary};
     white-space: nowrap;
-    &:hover {
-      color: ${theme.colors.text.primary};
-    }
+  `,
+  labelInactive: css`
+    cursor: pointer;
+    font-size: inherit;
+    color: ${theme.colors.text.disabled};
+    white-space: nowrap;
   `,
 });

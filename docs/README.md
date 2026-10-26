@@ -1,37 +1,42 @@
 # Vertical Time Series
 
-A página do repositório, em inglês, está em [README.md](../README.md). Este arquivo é o guia em português.
+Guia em português. A página curta do repositório (inglês, estilo catálogo Grafana) está em [README.md](../README.md).
 
-Plugin de visualização para Grafana baseado no plugin **XY Chart** oficial, modificado para suportar cenários de gráficos **N:1 (Múltiplos X, Um Y)**, comumente usados para visualizações verticais de múltiplas métricas (ex: perfis de poço, logs geológicos).
+## O que é
 
-Este fork resolve limitações arquiteturais do plugin nativo que impediam a interatividade (tooltips e legendas) quando o gráfico é configurado neste modo.
+Painel Grafana para gráfico **N:1**: várias métricas no eixo horizontal contra **uma referência comum** no eixo vertical (tempo, profundidade, perfil de poço, etc.).
 
----
+- **Id:** `vericode-verticaltimeseries-panel`
+- **Nome no Grafana:** Vertical Time Series
+- **Grafana:** 12.0.0 ou mais novo
+- **Licença:** Apache 2.0 (baseado no XY Chart)
 
-## O Problema (Por que este Fork Existe)
+Ainda sem assinatura: o Grafana só carrega se o id estiver no allow-list de plugins unsigned.
 
-O plugin XY Chart nativo do Grafana foi projetado para uma arquitetura **1:N** (Um X, Vários Ys). Ao tentar inverter essa lógica para um gráfico vertical (**N:1**), encontramos dois bloqueios críticos:
+## Por que existe
 
-1.  **Tooltip Quebrado:** O motor nativo (`scatter.ts`) desativa o índice de busca (`Quadtree`) se os pontos não forem desenhados. Em gráficos de "apenas linhas", o tooltip morre.
-2.  **Legenda Inutilizável:** A legenda nativa filtra pelo "Nome do Campo Y". Como no cenário vertical todas as séries compartilham o mesmo Y (ex: "Tempo"), clicar na legenda esconde todas as curvas de uma vez.
+O **XY Chart** nativo é **1:N** (um X, vários Y). No layout invertido (métrica em X, tempo/profundidade em Y) aparecem problemas:
 
-**Este plugin corrige estes problemas substituindo a camada de UI e ajustando o motor de renderização.**
+| Problema | No nativo | Neste painel |
+| --- | --- | --- |
+| Tooltip em série só de linhas | Não acha ponto (Quadtree só com `showPoints`) | Quadtree sempre ativo; tooltip funciona |
+| Legenda | Filtra pelo nome do campo Y compartilhado → some tudo | Isola por índice no uPlot (uma curva por vez) |
+| Eixos | Labels/placement se repetem entre X e Y | Tempo/referência no vertical; métricas embaixo |
 
-## Novas Funcionalidades
+Também há modo **Auto** pensado em formatos como Random Walk, CSV largo e **OpenHistorian** (métrica + `Time` por frame), sem precisar de Merge.
 
-| Funcionalidade | Descrição |
-| :--- | :--- |
-| **Suporte N:1 (Vertical)** | Plote múltiplas métricas (X) contra uma referência comum (Y) sem perder funcionalidades. |
-| **Tooltip Customizado** | Novo componente que funciona independente de haver "pontos" ou "linhas". |
-| **Legenda Inteligente** | Nova legenda que isola séries pelo índice, permitindo comparar curvas específicas ("Clique para Isolar"). |
-| **Editor Simplificado** | Novo editor "Manual" focado em criar pares 1:1 (X/Y) de forma rápida. |
-| **Eixos Independentes** | Lógica de eixos reescrita para permitir rótulos independentes para X e Y via Overrides. |
+## Como funciona (visão geral)
 
-## Instalação Rápida
+1. **Auto** — cada frame da consulta vira série(s). Campo de tempo → eixo vertical; demais colunas numéricas → métricas. Sem tempo, a primeira coluna assume o vertical.
+2. **Manual** — cada série é um par explícito: Y (referência) + X (métrica), no editor **Add series**.
+3. **Legenda** — clique no nome isola a curva; segundo clique restaura. Ctrl/Cmd alterna só aquela curva. Clique na cor abre o seletor.
+4. **Tooltip** — usa `display()` do campo (overrides de decimais, unidade, etc. valem).
 
-### Via Docker (Ambiente de Teste)
+Motor de desenho: **uPlot** (fork parcial do `scatter` / XY Chart).
 
-Clone o repositório e, na raiz, suba o ambiente com o plugin já provisionado:
+## Instalação
+
+### Desenvolvimento local
 
 ```bash
 npm install
@@ -39,66 +44,54 @@ npm run build
 npm run server
 ```
 
-Acesse: `http://localhost:3000` (admin/admin).
+Grafana de demo em http://localhost:3001 — login **admin / admin**. Os samples vêm de `provisioning/dashboards/dashboard.json` (inclui exemplos Auto, Manual e formato OpenHistorian).
 
-### Grafana separado
+### Em um Grafana existente
 
-Para testar o `dist` num Grafana que não é o do plugin, na raiz deste repositório, depois do build:
+1. Gere `dist/` com `npm run build`.
+2. Copie para o diretório de plugins com o nome do id:
 
-```powershell
-docker run -d --name grafana-plugin-test -p 3001:3000 -e GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=vericode-verticaltimeseries-panel -v "${PWD}\dist:/var/lib/grafana/plugins/vericode-verticaltimeseries-panel" grafana/grafana:12.2.1
+```bash
+cp -r dist /var/lib/grafana/plugins/vericode-verticaltimeseries-panel
 ```
 
-Acesse: `http://localhost:3001` (admin/admin).
+3. Em `grafana.ini`:
 
-### Via Manual (On-Premise)
+```ini
+[plugins]
+allow_loading_unsigned_plugins = vericode-verticaltimeseries-panel
+```
 
-1.  Gere a pasta `dist/` na raiz do repositório, com `npm install` e depois `npm run build`.
-2.  Copie a pasta `dist` para o diretório de plugins do servidor, com o nome do id do plugin:
+4. Reinicie o Grafana.
 
-    ```bash
-    sudo cp -r dist /var/lib/grafana/plugins/vericode-verticaltimeseries-panel
-    ```
+No Docker, monte `dist` e defina `GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=vericode-verticaltimeseries-panel`.
 
-3.  Permita plugins não assinados no `grafana.ini`:
+## Como usar
 
-    ```ini
-    [plugins]
-    allow_loading_unsigned_plugins = vericode-verticaltimeseries-panel
-    ```
+1. Adicione o painel **Vertical Time Series**.
+2. **Auto:** deixe a consulta; o gráfico monta sozinho se houver tempo + números (ou várias frames).
+3. **Manual:** em **Series mapping → Manual**, **Add series** e escolha Y (vertical) e X (métrica) para cada curva.
+4. Ajustes de cor, unidade, decimais e escala: **field overrides** do Grafana, como no Time series / XY Chart.
+5. Eixo da referência (tempo): override no campo de tempo → **Axis > Label / Placement** (Left, Right, Hidden). As métricas ficam no eixo de baixo.
 
-4.  Reinicie o Grafana:
+## Demo provisionada
 
-    ```bash
-    sudo systemctl restart grafana-server
-    ```
+O dashboard **Samples Vertical Time Series** traz:
 
-Se o Grafana recusar o plugin com "Plugin not signed", confira se o id `vericode-verticaltimeseries-panel` está nessa lista e se o serviço foi reiniciado depois da alteração.
+- Auto e Manual
+- Caso com uma série com dados e outra sem
+- Comparação lado a lado com o Time series nativo
+- Pares no formato OpenHistorian (vertical + time series)
 
-## Como Usar
+## Desenvolvimento (atalhos)
 
-### 1. Criando o Gráfico
-1.  Adicione o painel **"Vertical Time Series"**.
-2.  Na aba lateral, mude **XY Chart > Series Mapping** para **Manual**.
-3.  Clique em **Add series** e configure os seus pares:
-    * **Y-Field (Vertical):** Sua referência vertical (ex: `TEMPO`).
-    * **X-Field (Horizontal):** Sua métrica (ex: `SENSOR_A`).
-    * Repita para cada métrica.
+| Comando | Função |
+| --- | --- |
+| `npm run build` | Build de produção → `dist/` |
+| `npm run dev` | Watch |
+| `npm run typecheck` / `lint` / `test:ci` | Gates de CI |
+| `npm run server` | Grafana 12 via Docker Compose |
 
-### 2. Configurando Eixos (Dica de Ouro)
-Para que os rótulos fiquem perfeitos (Y à esquerda, X embaixo, sem duplicatas), use a aba **Overrides**:
+## Licença
 
-* **Eixo Y (Vertical):** Crie um override por **Nome** (`Fields by name: TEMPO`). Defina `Axis > Placement: Left` e o `Axis > Label` desejado.
-* **Eixo X (Horizontal):** Crie um override por **Regex** (`Fields matching regex: /SENSOR.*/`). Defina `Axis > Placement: Bottom` e deixe o `Axis > Label` vazio.
-
----
-
-## Documentação Detalhada
-
-Para detalhes profundos sobre a implementação e análise de código, consulte os ficheiros na raiz do projeto:
-
-* [Detalhes Técnicos e Arquitetura](MODIFICACOES_TECNICAS.md)
-* [Análise do Plugin Nativo](xychart_analysis.md)
-
----
-**Licença**: Apache License 2.0 (Baseado no Grafana XY Chart)
+Apache License 2.0. Baseado no Grafana XY Chart.

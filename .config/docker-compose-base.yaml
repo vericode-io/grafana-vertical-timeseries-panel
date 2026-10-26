@@ -1,7 +1,7 @@
 services:
   grafana:
     user: root
-    container_name: 'vericode-vertical-timeseries-panel'
+    container_name: 'vericode-verticaltimeseries-panel'
 
     build:
       context: .
@@ -11,15 +11,20 @@ services:
         development: ${DEVELOPMENT:-false}
         anonymous_auth_enabled: ${ANONYMOUS_AUTH_ENABLED:-true}
     ports:
-      - 3000:3000/tcp
+      - 3001:3000/tcp
     volumes:
-      - ../dist:/var/lib/grafana/plugins/vericode-custom
+      - ../dist:/var/lib/grafana/plugins/vericode-verticaltimeseries-panel
       - ../provisioning:/etc/grafana/provisioning
-      - ..:/root/vericode-custom
+      - ..:/root/vericode-custom-xychart
 
     environment:
       NODE_ENV: development
-      GF_LOG_FILTERS: plugin.vericode-custom:debug
+      GF_LOG_FILTERS: plugin.vericode-verticaltimeseries-panel:debug
       GF_LOG_LEVEL: debug
       GF_DATAPROXY_LOGGING: 1
       GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: vericode-verticaltimeseries-panel
+      # Prefer login in local demos to avoid anonymous /api/user 401 toasts.
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_AUTH_BASIC_ENABLED: "true"
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin

@@ -1,55 +1,48 @@
 # Vertical Time Series
 
-Shared vertical axis for multiple metrics.
+Grafana panel for multiple metrics on one shared vertical axis (depth, time, or another common reference).
 
-Vertical Time Series is a Grafana panel for plotting several metrics against one shared vertical axis. It is based on the Grafana XY Chart and is meant for cases where X is the measured value and Y is the common reference, such as depth or time.
+Built from the Grafana XY Chart for the inverted layout (value on X, shared reference on Y). Tooltip and legend keep working for line series; the legend isolates one series at a time.
 
-The built-in XY Chart is built around one X and many Y values. In the opposite layout, its tooltip stops working for line-only series, and the legend hides every series at once because they share the same Y field. This panel keeps the tooltip and the legend working in that layout. The legend isolates one series at a time.
+![Screenshot](src/img/screenshot.png)
 
 ## Requirements
 
-- Grafana 10.4.0 or later
+- Grafana **12.0.0** or later
+- Unsigned plugin allow-list until the plugin is signed (`vericode-verticaltimeseries-panel`)
 
-## Installation
+## Getting started
 
-The plugin is not signed yet. Grafana will load it only if the plugin id is allowed.
+```bash
+npm install
+npm run build
+npm run server
+```
 
-1. Build the plugin with `npm install` and `npm run build`, or use an existing `dist` folder.
-2. Copy that folder to the Grafana plugins directory and name it `vericode-verticaltimeseries-panel`. The folder must contain `plugin.json` and `module.js`.
-3. Allow the unsigned plugin in `grafana.ini`:
+Open http://localhost:3001 (admin / admin). Sample dashboards are provisioned automatically.
+
+## Install into an existing Grafana
+
+1. Copy the built `dist` folder to the plugins directory as `vericode-verticaltimeseries-panel`.
+2. Allow the plugin id:
 
 ```ini
 [plugins]
 allow_loading_unsigned_plugins = vericode-verticaltimeseries-panel
 ```
 
-4. Restart Grafana.
-
-On Docker, mount the built folder and set the same allow-list:
-
-```yaml
-environment:
-  GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: vericode-verticaltimeseries-panel
-volumes:
-  - ./dist:/var/lib/grafana/plugins/vericode-verticaltimeseries-panel
-```
+3. Restart Grafana.
 
 ## Usage
 
-1. Add a panel and choose **Vertical Time Series**.
-2. In the panel options, under **XY Chart**, set **Series mapping** to **Manual**.
-3. Click **Add series** and set each series:
-   - **Y-Field (Vertical):** the shared reference, such as depth or time.
-   - **X-Field (Horizontal):** one metric, such as a sensor reading.
-4. Repeat for each metric that should share that vertical axis.
+1. Add a **Vertical Time Series** panel.
+2. **Auto** mapping draws every numeric series on the shared vertical axis (time field becomes Y when present).
+3. **Manual** mapping: under **Series mapping**, add each series with **Y-Field** (shared reference) and **X-Field** (metric).
 
-To keep axis titles from being duplicated, use field overrides:
+## Documentation
 
-- For the Y field, set **Axis > Placement** to **Left** and set the axis label.
-- For the X fields, set **Axis > Placement** to **Bottom** and leave the axis label empty.
+- Portuguese guide: [docs/README.md](docs/README.md)
 
 ## License
 
 Apache License 2.0. Based on the Grafana XY Chart.
-
-Notes in Portuguese: [docs/README.md](https://github.com/vericode-io/vericode-custom-xychart/blob/main/docs/README.md).
