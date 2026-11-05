@@ -4,7 +4,7 @@ Grafana panel for multiple metrics on one shared vertical axis (depth, time, or 
 
 Built from the Grafana XY Chart for the inverted layout (value on X, shared reference on Y). Tooltip and legend keep working for line series; the legend isolates one series at a time.
 
-![Screenshot](src/img/screenshot.png)
+![Screenshot](https://raw.githubusercontent.com/vericode-io/grafana-vertical-timeseries-panel/main/src/img/screenshot.png)
 
 ## Requirements
 
@@ -41,7 +41,7 @@ allow_loading_unsigned_plugins = vericode-verticaltimeseries-panel
 
 ## Documentation
 
-- Portuguese guide: [docs/README.md](docs/README.md)
+- Portuguese guide: [docs/README.md](https://github.com/vericode-io/grafana-vertical-timeseries-panel/blob/main/docs/README.md)
 
 ## License
 
